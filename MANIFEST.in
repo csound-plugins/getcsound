@@ -1,0 +1,4 @@
+include LICENSE
+include README.rst
+include getcsound/data/getcsound.sh
+include getcsound/data/getcsound.ps1
