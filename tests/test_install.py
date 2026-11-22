@@ -134,7 +134,7 @@ def test_install_csound_windows(tmp_path, monkeypatch, isolated_env):
                         lambda powershell=None: True)
     monkeypatch.setenv("ProgramW6432", str(program_files))
     monkeypatch.delenv("ProgramFiles", raising=False)
-    dll = _make_file(program_files / "Csound7/bin/csound64.dll")
+    dll = _make_file(program_files / "Csound7/bin/csound7_64.dll")
     plugins = _make_dir(program_files / "Csound7/plugins64")
     calls = []
     monkeypatch.setattr(_install, "run_installer",

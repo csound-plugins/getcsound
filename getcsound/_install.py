@@ -281,7 +281,7 @@ def install_csound_windows(quiet: bool = True) -> CsoundInstallation:
             "x86_64 package only.\n"
             "Install Csound manually (e.g. from "
             "https://github.com/csound/csound/releases) and point "
-            "LIBCSOUNDPATH at the installed csound64.dll.")
+            "LIBCSOUNDPATH at the installed csound7_64.dll.")
 
     powershell = _find_powershell()
 
@@ -330,8 +330,8 @@ def install_csound_windows(quiet: bool = True) -> CsoundInstallation:
 
     first = _windows_candidates()[0]
     raise CsoundInstallError(
-        f"Csound 7 installation failed: csound64.dll was not found in "
-        f"'{first.bindir}'")
+        f"Csound 7 installation failed: csound7_64.dll (or csound64.dll) was "
+        f"not found in '{first.bindir}'")
 
 
 def install_csound(quiet: bool = True) -> CsoundInstallation:

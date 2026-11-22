@@ -92,7 +92,7 @@ def test_find_windows_installation(tmp_path, monkeypatch, isolated_env):
     monkeypatch.setattr(_locate.sys, "platform", "win32")
     monkeypatch.setenv("ProgramW6432", str(tmp_path))
     monkeypatch.delenv("ProgramFiles", raising=False)
-    dll = _make_file(tmp_path / "Csound7/bin/csound64.dll")
+    dll = _make_file(tmp_path / "Csound7/bin/csound7_64.dll")
     plugins = _make_dir(tmp_path / "Csound7/plugins64")
 
     installation = find_csound()
@@ -101,6 +101,18 @@ def test_find_windows_installation(tmp_path, monkeypatch, isolated_env):
     assert installation.libpath == dll.resolve()
     assert installation.plugindir == plugins.resolve()
     assert installation.bindir == (tmp_path / "Csound7/bin").resolve()
+
+
+def test_find_windows_legacy_library_name(tmp_path, monkeypatch, isolated_env):
+    monkeypatch.setattr(_locate.sys, "platform", "win32")
+    monkeypatch.setenv("ProgramW6432", str(tmp_path))
+    monkeypatch.delenv("ProgramFiles", raising=False)
+    dll = _make_file(tmp_path / "Csound7/bin/csound64.dll")
+
+    installation = find_csound()
+
+    assert installation is not None
+    assert installation.libpath == dll.resolve()
 
 
 def test_find_macos_installation(tmp_path, monkeypatch, isolated_env):

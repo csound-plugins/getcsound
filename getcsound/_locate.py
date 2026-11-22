@@ -24,7 +24,9 @@ _MACOS_PLUGINS = (_MACOS_CSOUND_DIR / "CsoundLib64.framework" / "Resources"
                   / "Opcodes64")
 
 _WINDOWS_CSOUND_DIR = "Csound7"
-_WINDOWS_LIB = Path("bin") / "csound64.dll"
+# Csound 7 uses csound7_64.dll (double precision); csound64.dll is the
+# Csound 6 name and is kept as a fallback for older Csound 7 builds.
+_WINDOWS_LIB_NAMES = ("csound7_64.dll", "csound64.dll")
 _WINDOWS_PLUGINS = Path("plugins64")
 
 
@@ -117,19 +119,22 @@ def _windows_candidates() -> list[CsoundInstallation]:
         value = os.environ.get(var)
         if value and value not in seen:
             seen.add(value)
-            candidates.append(_windows_candidate(Path(value)))
+            candidates.extend(_windows_candidates_for(Path(value)))
     # This mirrors the fallback used by the installers when the environment
     # variable is not set.
     if r"C:\Program Files" not in seen:
-        candidates.append(_windows_candidate(Path(r"C:\Program Files")))
+        candidates.extend(_windows_candidates_for(Path(r"C:\Program Files")))
     return candidates
 
 
-def _windows_candidate(program_files: Path) -> CsoundInstallation:
+def _windows_candidates_for(program_files: Path) -> list[CsoundInstallation]:
     csound_dir = program_files / _WINDOWS_CSOUND_DIR
-    return CsoundInstallation(csound_dir / _WINDOWS_LIB,
-                              csound_dir / _WINDOWS_PLUGINS,
-                              csound_dir / "bin")
+    return [
+        CsoundInstallation(csound_dir / "bin" / libname,
+                           csound_dir / _WINDOWS_PLUGINS,
+                           csound_dir / "bin")
+        for libname in _WINDOWS_LIB_NAMES
+    ]
 
 
 def _from_environment() -> CsoundInstallation | None:
