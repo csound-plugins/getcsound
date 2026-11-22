@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=77"]
+requires = ["setuptools>=77", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "getcsound"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Install Csound 7 from Python, with no runtime dependencies"
 authors = [
     { name = "Eduardo Moguillansky", email = "eduardo.moguillansky@gmail.com" },
@@ -39,6 +39,14 @@ packages = ["getcsound"]
 
 [tool.setuptools.package-data]
 getcsound = ["data/*.sh", "data/*.ps1", "py.typed"]
+
+[tool.setuptools_scm]
+# Versions come from git tags. Cut a release with:
+#     git tag 0.1.0 && git push --tags
+# fallback_version only applies when building from a tree without git
+# metadata (e.g. a GitHub "Download ZIP" archive); sdists carry the frozen
+# version in PKG-INFO and are unaffected.
+fallback_version = "0.0.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
