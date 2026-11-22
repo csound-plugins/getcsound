@@ -159,6 +159,20 @@ def test_install_csound_windows(tmp_path, monkeypatch, isolated_env):
     assert cmd[-1] == "--quiet"
 
 
+def test_find_powershell_prefers_pwsh(monkeypatch):
+    monkeypatch.setattr(
+        _install.shutil, "which",
+        lambda name: {"pwsh": "/pwsh", "powershell": "/powershell"}.get(name))
+    assert _install._find_powershell() == "/pwsh"
+
+
+def test_find_powershell_falls_back_to_windows_powershell(monkeypatch):
+    monkeypatch.setattr(
+        _install.shutil, "which",
+        lambda name: "/powershell" if name == "powershell" else None)
+    assert _install._find_powershell() == "/powershell"
+
+
 def test_windows_is_admin_true():
     assert _install._windows_is_admin("/bin/true") is True
 

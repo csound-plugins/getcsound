@@ -197,7 +197,11 @@ def install_csound_macos(quiet: bool = True) -> CsoundInstallation:
 
 
 def _find_powershell() -> str:
-    powershell = shutil.which("powershell") or shutil.which("pwsh")
+    # Prefer PowerShell 7. Windows PowerShell 5.1's Expand-Archive -Force can
+    # fail with "Cannot find an overload for ExtractToDirectory ... argument
+    # count: 3" on .NET Framework, so use pwsh when it is available and fall
+    # back to the built-in powershell otherwise.
+    powershell = shutil.which("pwsh") or shutil.which("powershell")
     if not powershell:
         raise CsoundInstallError(
             "PowerShell was not found. It is needed to install Csound on "
@@ -215,7 +219,7 @@ def _windows_is_admin(powershell: str | None = None) -> bool:
     than assuming admin rights.
     """
     if powershell is None:
-        powershell = shutil.which("powershell") or shutil.which("pwsh")
+        powershell = shutil.which("pwsh") or shutil.which("powershell")
     if not powershell:
         logger.debug("Could not determine Windows elevation status: "
                      "PowerShell was not found")
