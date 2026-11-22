@@ -6,7 +6,7 @@ Install Csound 7 from Python, with no runtime dependencies.
 
 ``getcsound`` is a small, pure-Python package that makes Csound available to
 other Python packages. A package using Csound can list ``getcsound`` as a
-dependency and call :func:`getcsound.ensure_csound`; if Csound is not already
+dependency and call ``getcsound.ensure_csound()``; if Csound is not already
 installed, the official Csound 7 installer is downloaded and run automatically.
 
 ``getcsound`` does **not** depend on ``libcsound`` and does **not** import
